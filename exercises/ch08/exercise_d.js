@@ -12,8 +12,22 @@
 //
 // Remember either's two arguments must return the same type.
 
+// getLength: String => Number
+const getLength = curry((x) => x.length);
+
+// gt :: Number -> Number -> Bool
+const gt = curry((a, b) => b > a);
+
 // validateName :: User -> Either String ()
-const validateName = undefined;
+const validateName = ({ name }) => (name.length > 3
+    ? Either.of(null)
+    : left('Your name need to be > 3')
+  );
 
 // register :: User -> IO String
-const register = compose(undefined, validateUser(validateName));
+const saveAndWelcome = compose(map(showWelcome), save);
+
+const register = compose(
+  either(IO.of, saveAndWelcome),
+  validateUser(validateName),
+);
